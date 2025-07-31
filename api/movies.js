@@ -1,5 +1,3 @@
-// api/movies.js
-import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
   const tmdbToken = process.env.TMDB_TOKEN;
