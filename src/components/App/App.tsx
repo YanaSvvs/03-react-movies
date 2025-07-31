@@ -1,6 +1,6 @@
-import  { useState } from 'react';
-import  { fetchMovies } from '../../services/movieService';
-import type { Movie } from '../../types/movie';
+import { useState } from 'react';
+import { fetchMovies } from '../../services/movieService';
+import type { Movie } from '../../types/movie'; 
 
 import SearchBar from '../SearchBar/SearchBar';
 import MovieGrid from '../MovieGrid/MovieGrid';
@@ -8,6 +8,7 @@ import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import MovieModal from '../MovieModal/MovieModal';
 
+import { Toaster } from 'react-hot-toast'; 
 import toast from 'react-hot-toast';
 import css from './App.module.css';
 
@@ -21,7 +22,7 @@ function App() {
     try {
       setIsLoading(true);
       setError(null);
-      setMovies([]); // Очищення попередніх результатів
+      setMovies([]); 
       const results = await fetchMovies(query);
       if (results.length === 0) {
         toast.error('No movies found for your request.');
@@ -29,7 +30,9 @@ function App() {
       setMovies(results);
     } catch (err) {
       console.error("Помилка при пошуку фільмів:", err);
-      setError('There was an error, please try again...');
+      
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(`There was an error: ${errorMessage}. Please try again...`);
       toast.error('Oops, something went wrong!');
     } finally {
       setIsLoading(false);
@@ -50,7 +53,7 @@ function App() {
 
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} />}
-      
+
       {movies.length > 0 && !isLoading && (
         <MovieGrid movies={movies} onSelect={openModal} />
       )}
@@ -58,6 +61,8 @@ function App() {
       {selectedMovie && (
         <MovieModal movie={selectedMovie} onClose={closeModal} />
       )}
+
+      <Toaster position="top-right" /> {}
     </div>
   );
 }

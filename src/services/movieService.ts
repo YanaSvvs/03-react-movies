@@ -1,29 +1,25 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
-import type { Movie } from '../types/movie';
-
-const apiClient = axios.create({
-  baseURL: 'https://api.themoviedb.org/3',
-  headers: {
-    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-  },
-});
+import type { Movie } from '../types/movie'; 
 
 interface FetchMoviesResponse {
+  page: number;
   results: Movie[];
+  total_pages: number;
+  total_results: number;
 }
 
 export const fetchMovies = async (query: string): Promise<Movie[]> => {
-  const response: AxiosResponse<FetchMoviesResponse> = await apiClient.get(
-    '/search/movie',
-    {
-      params: {
-        query: query,
-        include_adult: false,
-        language: 'en-US',
-        page: 1,
-      },
-    }
-  );
-  return response.data.results;
+  try {
+   
+    const response: AxiosResponse<FetchMoviesResponse> = await axios.get(`/api/movies`, {
+      params: { query }, 
+    });
+
+    return response.data.results;
+  } catch (error) {
+    console.error("Error in fetchMovies (client-side):", error);
+    
+    throw error; 
+  }
 };
