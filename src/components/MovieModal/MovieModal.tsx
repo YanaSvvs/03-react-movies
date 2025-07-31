@@ -1,6 +1,6 @@
-import { useEffect, MouseEvent } from 'react';
+import  type { useEffect, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
-import { Movie } from '../../types/movie';
+import type { Movie } from '../../types/movie';
 import css from './MovieModal.module.css';
 
 const modalRoot = document.getElementById('modal-root') as HTMLElement;

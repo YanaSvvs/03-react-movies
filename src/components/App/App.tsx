@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { fetchMovies } from '../../services/movieService';
-import { Movie } from '../../types/movie';
+import  { useState } from 'react';
+import  { fetchMovies } from '../../services/movieService';
+import type { Movie } from '../../types/movie';
 
 import SearchBar from '../SearchBar/SearchBar';
 import MovieGrid from '../MovieGrid/MovieGrid';
@@ -28,6 +28,7 @@ function App() {
       }
       setMovies(results);
     } catch (err) {
+      console.error("Помилка при пошуку фільмів:", err);
       setError('There was an error, please try again...');
       toast.error('Oops, something went wrong!');
     } finally {

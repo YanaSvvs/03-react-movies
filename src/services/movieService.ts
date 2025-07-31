@@ -1,7 +1,6 @@
 import axios from 'axios';
-// ВИПРАВЛЕНО: Додано ключове слово 'type' для імпорту типів
-import { type AxiosResponse } from 'axios';
-import { type Movie } from '../types/movie';
+import type { AxiosResponse } from 'axios';
+import type { Movie } from '../types/movie';
 
 const apiClient = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
