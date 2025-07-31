@@ -1,6 +1,6 @@
+// src/services/movieService.ts
 import axios from 'axios';
-import type { AxiosResponse } from 'axios';
-import type { Movie } from '../types/movie'; 
+import type { Movie } from '../types/movie';
 
 interface FetchMoviesResponse {
   page: number;
@@ -11,8 +11,8 @@ interface FetchMoviesResponse {
 
 export const fetchMovies = async (query: string): Promise<Movie[]> => {
   try {
-   
-    const response: AxiosResponse<FetchMoviesResponse> = await axios.get(`/api/movies`, {
+    
+    const response = await axios.get<FetchMoviesResponse>(`/api/movies`, {
       params: { query }, 
     });
 
@@ -20,6 +20,12 @@ export const fetchMovies = async (query: string): Promise<Movie[]> => {
   } catch (error) {
     console.error("Error in fetchMovies (client-side):", error);
     
-    throw error; 
+    if (axios.isAxiosError(error)) {
+      
+      const errorMessage = error.response?.data?.error || error.message || 'Unknown error during fetch.';
+      throw new Error(`Failed to fetch movies: ${errorMessage}`);
+    } else {
+      throw new Error('An unexpected error occurred while fetching movies.');
+    }
   }
 };
