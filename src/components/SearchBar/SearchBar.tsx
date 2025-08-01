@@ -1,26 +1,23 @@
-import { useState, type FormEvent } from 'react'; 
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
-  onSubmit: (query: string) => Promise<void>;
+  action: (formData: FormData) => Promise<void>; 
 }
 
+export default function SearchBar({ action }: SearchBarProps) { 
+  const [query, setQuery] = useState('');
 
-export default function SearchBar({ onSubmit }: SearchBarProps) {
-  const [query, setQuery] = useState(''); 
+  const handleFormAction = async (formData: FormData) => {
+    const searchQuery = formData.get('query') as string;
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    
-    const formData = new FormData(evt.currentTarget);
-    const searchQuery = formData.get('query') as string; 
-
-    if (searchQuery.trim() === '') { 
+    if (searchQuery.trim() === '') {
       toast.error('Please enter your search query.');
-      return;
+      return; 
     }
-    onSubmit(searchQuery); 
+
+    await action(formData); 
     setQuery(''); 
   };
 
@@ -35,12 +32,14 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
         >
           Powered by TMDB
         </a>
-        <form className={styles.form} onSubmit={handleSubmit}>
+        {/* Використовуємо атрибут action та передаємо функцію handleFormAction */}
+        {}
+        <form className={styles.form} action={handleFormAction}>
           <input
             className={styles.input}
             type="text"
-            name="query" 
-            value={query} 
+            name="query"
+            value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
             placeholder="Search movies..."
