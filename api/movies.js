@@ -1,11 +1,12 @@
+// api/movies.js
 
 export default async function handler(req, res) {
   const tmdbToken = process.env.VITE_TMDB_TOKEN;
   const { query } = req.query;
 
   if (!tmdbToken) {
-    console.error("Server Error: TMDB_TOKEN is not configured in Vercel environment variables.");
-    return res.status(500).json({ error: 'Server Error: VITE_TMDB_TOKEN token is not configured.' });
+    console.error("Server Error: VITE_TMDB_TOKEN is not configured in Vercel environment variables.");
+    return res.status(500).json({ error: 'Server Error: TMDB token is not configured.' });
   }
 
   if (!query) {
@@ -14,6 +15,9 @@ export default async function handler(req, res) {
 
   try {
     const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=en-US&page=1`;
+
+    console.log("TMDB Token being used (first 10 chars):", tmdbToken.substring(0, 10) + "..."); 
+
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${tmdbToken}`, 
