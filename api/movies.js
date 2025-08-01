@@ -1,6 +1,6 @@
 
 export default async function handler(req, res) {
-  const tmdbToken = process.env.TMDB_API_KEY;
+  const tmdbToken = process.env.VITE_TMDB_TOKEN;
   const { query } = req.query;
 
   if (!tmdbToken) {
