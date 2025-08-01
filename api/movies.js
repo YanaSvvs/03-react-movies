@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   if (!tmdbToken) {
     console.error("Server Error: TMDB_TOKEN is not configured in Vercel environment variables.");
-    return res.status(500).json({ error: 'Server Error: TMDB token is not configured.' });
+    return res.status(500).json({ error: 'Server Error: VITE_TMDB_TOKEN token is not configured.' });
   }
 
   if (!query) {
