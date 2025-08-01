@@ -11,16 +11,16 @@ interface FetchMoviesResponse {
 export const fetchMovies = async (query: string): Promise<Movie[]> => {
   try {
     
-    const authToken = process.env.TMDB_TOKEN; 
+    const authToken = import.meta.env.VITE_TMDB_TOKEN; 
 
     if (!authToken) {
       
-      throw new Error('Authentication token (TMDB_TOKEN) is not defined in environment variables.');
+      throw new Error('Authentication token (VITE_TMDB_TOKEN) is not defined in environment variables.');
     }
 
     const response = await axios.get<FetchMoviesResponse>(`/api/movies`, {
       params: { query },
-      
+   
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -34,7 +34,7 @@ export const fetchMovies = async (query: string): Promise<Movie[]> => {
       const status = error.response?.status;
 
       if (status === 401) {
-        throw new Error(`Authentication failed. Please check your TMDB_TOKEN and server configuration.`);
+        throw new Error(`Authentication failed. Please check your VITE_TMDB_TOKEN and server configuration.`);
       } else if (status === 400) {
         throw new Error(`Invalid request: ${apiError || 'Query missing.'}`);
       } else if (status === 500) {

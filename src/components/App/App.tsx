@@ -18,15 +18,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const handleSearchAction = async (formData: FormData) => {
-    
-    const query = formData.get('query') as string;
-
-    if (query.trim() === '') {
-      toast.error('Please enter your search query.');
-      return;
-    }
-
+  const handleSearch = async (query: string) => {
     setIsLoading(true);
     setError(null);
     setMovies([]); 
@@ -40,11 +32,10 @@ function App() {
       setMovies(results);
     } catch (err) {
       console.error("Помилка при пошуку фільмів:", err);
-      
       const errorMessage = err instanceof Error ? err.message : String(err);
       setError(`There was an error: ${errorMessage}. Please try again...`);
       toast.error('Oops, something went wrong!');
-      setMovies([]); 
+      setMovies([]);
     } finally {
       setIsLoading(false);
     }
@@ -60,26 +51,24 @@ function App() {
 
   return (
     <div className={css.container}>
-      {/* Передаємо handleSearchAction як пропс 'action' до SearchBar */}
-      <SearchBar action={handleSearchAction} />
+      {/* Передаємо handleSearch як пропс onSubmit до SearchBar. */}
+      <SearchBar onSubmit={handleSearch} />
 
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} />}
 
-      {/* Відображаємо сітку фільмів, якщо є результати і завантаження завершено */}
       {movies.length > 0 && !isLoading && (
         <MovieGrid movies={movies} onSelect={openModal} />
       )}
 
-      {/* Відображаємо модальне вікно, якщо вибрано фільм */}
       {selectedMovie && (
         <MovieModal movie={selectedMovie} onClose={closeModal} />
       )}
 
-      {/* Компонент для відображення повідомлень toast */}
       <Toaster position="top-right" />
     </div>
   );
 }
 
 export default App;
+
